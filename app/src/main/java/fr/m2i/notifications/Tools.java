@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
-import static android.provider.Settings.Global.getString;
 
 /**
  * Created by Administrateur on 09/01/2018.
@@ -23,14 +22,23 @@ public class Tools {
     public static int showNotification(Context ctx, String channel) {
         // o = version 26 (Oreo)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return showNotificationV_26(ctx, channel);
+            return showNotificationV_26(ctx, channel, null);
         } else {
-            return showNotificationV_25(ctx, channel);
+            return showNotificationV_25(ctx, channel, null);
+        }
+    }
+
+    public static int showNotification(Context ctx, String channel, PendingIntent intent) {
+        // o = version 26 (Oreo)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return showNotificationV_26(ctx, channel, intent);
+        } else {
+            return showNotificationV_25(ctx, channel, intent);
         }
 
     }
 
-    public static int showNotificationV_26(Context ctx, String channel) {
+    public static int showNotificationV_26(Context ctx, String channel, PendingIntent intent) {
 
         //création du channel pour la notification
 
@@ -80,21 +88,24 @@ public class Tools {
         mBuilder.setContentTitle("Ma premiere notification n°" + notifID);
         mBuilder.setSmallIcon(R.drawable.notification);*/
 
-
+            // intent objet qui définit ce qu'on fait quand on clic
+            mBuilder.setContentIntent(intent);
             mNotificationManager.notify(notifID, mBuilder.build());
         }
         return notifID;
     }
 
-    public static int showNotificationV_25(Context ctx, String channel) {
+    public static int showNotificationV_25(Context ctx, String channel, PendingIntent intent) {
 
         NotificationManager mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder mBuilder = new Notification.Builder(ctx);
         mBuilder.setContentText("Youpiiiiii");
         mBuilder.setContentTitle("Ma premiere notification n°" + notifID);
         mBuilder.setSmallIcon(R.drawable.notification);
-
         mNotificationManager.notify(notifID, mBuilder.build());
+
+        // intent objet qui définit ce qu'on fait quand on clic
+        mBuilder.setContentIntent(intent);
         return notifID;
     }
 
